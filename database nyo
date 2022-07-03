@@ -1,0 +1,127 @@
+
+CREATE TABLE IF NOT EXISTS `admin` (
+  `id` int(25) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `password`) VALUES
+(2, 'akun', '3d342d6e0c524dd57f1728a053eedff3'),
+(0, '22', 'b6d767d2f8ed5d21a44b0e5886680cb9'),
+(0, '22', 'b6d767d2f8ed5d21a44b0e5886680cb9');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang`
+--
+
+CREATE TABLE IF NOT EXISTS `barang` (
+  `id` int(25) NOT NULL,
+  `nama_produk` varchar(255) NOT NULL,
+  `harga` varchar(255) NOT NULL,
+  `kategori` varchar(255) NOT NULL,
+  `stok` int(10) NOT NULL,
+  `kode_barang` varchar(15) NOT NULL,
+  `tahun` varchar(4) default NULL,
+  `deskripsi` text,
+  `gambar` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barang`
+--
+
+INSERT INTO `barang` (`id`, `nama_produk`, `harga`, `kategori`, `stok`, `kode_barang`, `tahun`, `deskripsi`, `gambar`) VALUES
+(16, '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Rp 410.000.000', 'Mobil Honda', -5, 'CRV', '2015', 'Konfigurasi Toyota Avanza\r\n\r\nMPV terbaru dari Toyota, Avanza, hadir dengan 4 varian. Varian tertinggi hadir dengan mesin Petrol 1329 cc, yang mampu menghasilkan tenaga hingga 95 hp dan torsi puncak 121 Nm. Avanza 1.3G AT berkapasitas 7-penupang dibekali juga dengan transmisi 4-Speed Automatic. Sistem keamanannya dibekali Anti Theft Device & Anti-Theft Alarm.', 'mbl.jpg'),
+(17, '2016 - HONDA - ACCORD VTI 2.4 A/T', 'Rp 500.000.000', 'Mobil Honda', 2, 'ACCORD', '2015', 'Konfigurasi Toyota Avanza\r\n\r\nMPV terbaru dari Toyota, Avanza, hadir dengan 4 varian. Varian tertinggi hadir dengan mesin Petrol 1329 cc, yang mampu menghasilkan tenaga hingga 95 hp dan torsi puncak 121 Nm. Avanza 1.3G AT berkapasitas 7-penupang dibekali juga dengan transmisi 4-Speed Automatic. Sistem keamanannya dibekali Anti Theft Device & Anti-Theft Alarm.', 'mbl.jpg'),
+(0, '13', '13', 'Mobil Honda', 1, '11', '232', NULL, 'alfad.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pesan`
+--
+
+CREATE TABLE IF NOT EXISTS `pesan` (
+  `id` int(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pesan`
+--
+
+INSERT INTO `pesan` (`id`, `name`, `email`, `message`) VALUES
+(2, 'Restu Be', 'ressdf@merahputih.id', 'Hello World!');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(25) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `phone` int(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `phone`) VALUES
+(1, 'iman', 'iman@gmail.com', '5be9a68073f66a56554e25614e9f1c9a', 123),
+(0, '22', '22', 'b6d767d2f8ed5d21a44b0e5886680cb9', 22);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `verifikasi`
+--
+
+CREATE TABLE IF NOT EXISTS `verifikasi` (
+  `id` int(25) NOT NULL,
+  `nama` varchar(100) default NULL,
+  `nama_produk` varchar(255) default NULL,
+  `status` varchar(255) default NULL,
+  `metode` varchar(255) NOT NULL,
+  `waktu` varchar(255) NOT NULL,
+  `jenis` varchar(255) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `kode_barang` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Triggers `verifikasi`
+--
+DROP TRIGGER IF EXISTS `2021mobil`.`TG_Verif`;
+DELIMITER //
+CREATE TRIGGER `2021mobil`.`TG_Verif` AFTER INSERT ON `2021mobil`.`verifikasi`
+ FOR EACH ROW BEGIN
+UPDATE barang SET stok = stok - NEW.qty WHERE kode_barang = NEW.kode_barang;
+END
+//
+DELIMITER ;
+
+--
+-- Dumping data for table `verifikasi`
+--
+
+INSERT INTO `verifikasi` (`id`, `nama`, `nama_produk`, `status`, `metode`, `waktu`, `jenis`, `qty`, `kode_barang`) VALUES
+(50, 'iman', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Diterima', 'Credit', 'Credit Card', '3 Minggu', 1, 'CRV'),
+(51, 'iman', '2016 - HONDA - ACCORD VTI 2.4 A/T', 'Ditolak', 'Cash', 'Cash', '2 Hari', 1, 'ACCORD'),
+(0, '22', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Menunggu Persetujuan', 'Cash', 'Cash', '2 Hari', 1, 'CRV'),
+(0, '', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Menunggu Persetujuan', 'Cash', 'Cash', '2 Hari', 1, 'CRV'),
+(0, '', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Menunggu Persetujuan', 'Cash', 'Cash', '2 Hari', 1, 'CRV'),
+(0, '', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Menunggu Persetujuan', 'Cash', 'Cash', '2 Hari', 1, 'CRV'),
+(0, '', '2015 - HONDA - CRV RE1 2WD 2,4 AT', 'Menunggu Persetujuan', 'Cash', 'Cash', '2 Hari', 1, 'CRV');
